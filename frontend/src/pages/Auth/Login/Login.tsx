@@ -13,15 +13,18 @@ const Login: React.FC = () => {
   return (
     <Background footer={<div>Footer Content</div>} image={loginCarImage}>
       <div className="mb-10">
-        <h1 className="font-oswald text-7xl font-semibold mb-3">Welcome</h1>
-        <p className="text-gray-400 text-base font-medium  tracking-wide">
-          We are glad to see you back with us
+        <h1 className="font-oswald text-7xl font-semibold mb-3 max-[400px]:text-6xl">
+          Welcome
+        </h1>
+        <p className="text-gray-400 text-base font-medium tracking-wide ">
+          We are glad to see you back{' '}
+          <br className="hidden max-[400px]:block"></br> with us
         </p>
       </div>
       <div className="flex flex-col gap-5 relative mb-6">
         <Input
           placeholder="Email"
-          type="text"
+          type="email"
           svg={
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +40,7 @@ const Login: React.FC = () => {
             </svg>
           }
         />
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 items-end">
           <Input
             placeholder="Password"
             type="password"
@@ -58,24 +61,26 @@ const Login: React.FC = () => {
           />
           <Link
             to="/forgot-password"
-            className="text-gray-400 hover:text-gray-500 transition-all ease-in-out duration-300 w-full text-lg text-right">
+            className="text-gray-400 hover:text-gray-500 transition-all ease-in-out duration-300 text-lg w-fit focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-opacity-60 focus:ring-offset-[3px] rounded-sm">
             Forgot password?
           </Link>
         </div>
         <Button className="mt-6">Get Started</Button>
       </div>
       <HR containerClassName="mb-4">Or sign in with</HR>
-      <div className="flex flex-row gap-14 items-center justify-center">
+      <div className="flex flex-row gap-14 items-center justify-center max-[360px]:gap-10">
         <ExternalLoginIcon src={googleIcon} />
         <ExternalLoginIcon src={facebookIcon} />
         <ExternalLoginIcon src={linkedinIcon} />
       </div>
       <div className="flex flex-col gap-4 absolute bottom-0 left-1/2 transform -translate-x-1/2">
-        <span>
-          <span className="text-gray-500 text-lg">Don't have an account? </span>
+        <span className="flex flex-col justify-center items-center 2xl:block">
+          <span className="text-gray-500 text-lg w-max">
+            Don't have an account?{' '}
+          </span>
           <Link
             to="/signup"
-            className="text-gray-400 hover:text-gray-500 transition-all ease-in-out duration-300 w-max border-b-[0.1rem] border-gray-400 hover:border-gray-500 text-lg">
+            className="text-gray-400 hover:text-gray-500 transition-all ease-in-out duration-300 w-max border-b-[0.1rem] border-gray-400 hover:border-gray-500 text-lg focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-opacity-60 focus:ring-offset-[3px]">
             Sign Up
           </Link>
         </span>

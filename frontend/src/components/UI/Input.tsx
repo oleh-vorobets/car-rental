@@ -12,7 +12,7 @@ const Input: React.FC<IInput> = ({ placeholder, svg, type }) => {
       <div className="relative">
         <input
           type={type}
-          className="w-full pl-20 font-roboto font-medium pr-5 py-3 bg-back-main placeholder:text-gray-400 placeholder:text-xl placeholder:font-roboto placeholder:tracking-wide text-gray-900 text-xl border border-slate-200 rounded-full transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
+          className="w-full pl-20 font-roboto font-medium pr-5 py-3 bg-back-main placeholder:text-gray-400 placeholder:text-xl placeholder:font-roboto placeholder:tracking-wide text-gray-900 text-xl border border-slate-200 rounded-full transition duration-300 ease focus:outline-none focus:ring-slate-400 focus:ring-2 hover:border-slate-300 shadow-sm focus:shadow"
           placeholder={placeholder}
         />
 
