@@ -8,12 +8,28 @@ import facebookIcon from '../../../assets/icons/facebook.png';
 import linkedinIcon from '../../../assets/icons/linkedin.png';
 import ExternalLoginIcon from '../../../components/UI/ExternalLoginIcon';
 import HR from '../../../components/UI/HR';
+import { useState } from 'react';
+import ErrorMessage from '../../../components/UI/ErrorMessage';
 
 const Login: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isError, setIsError] = useState(false);
+
+  function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setEmail(e.target.value);
+    setIsError(true);
+  }
+
+  function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setPassword(e.target.value);
+    setIsError(false);
+  }
+
   return (
-    <Background footer={<div>Footer Content</div>} image={loginCarImage}>
-      <div className="mb-10">
-        <h1 className="font-oswald text-7xl font-semibold mb-3 max-[400px]:text-6xl">
+    <Background image={loginCarImage}>
+      <div className={`${isError ? 'mb-6' : 'mb-10'}`}>
+        <h1 className="font-oswald text-7xl font-semibold mb-2 max-[400px]:text-6xl">
           Welcome
         </h1>
         <p className="text-gray-400 text-base font-medium tracking-wide ">
@@ -21,10 +37,13 @@ const Login: React.FC = () => {
           <br className="hidden max-[400px]:block"></br> with us
         </p>
       </div>
+      {isError && <ErrorMessage>Invalid email or password!</ErrorMessage>}
       <div className="flex flex-col gap-5 relative mb-6">
         <Input
           placeholder="Email"
           type="email"
+          value={email}
+          onChange={handleEmailChange}
           svg={
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -44,6 +63,8 @@ const Login: React.FC = () => {
           <Input
             placeholder="Password"
             type="password"
+            value={password}
+            onChange={handlePasswordChange}
             svg={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -69,12 +90,12 @@ const Login: React.FC = () => {
       </div>
       <HR containerClassName="mb-4">Or sign in with</HR>
       <div className="flex flex-row gap-14 items-center justify-center max-[360px]:gap-10">
-        <ExternalLoginIcon src={googleIcon} />
-        <ExternalLoginIcon src={facebookIcon} />
-        <ExternalLoginIcon src={linkedinIcon} />
+        <ExternalLoginIcon src={googleIcon} href="#" />
+        <ExternalLoginIcon src={facebookIcon} href="#" />
+        <ExternalLoginIcon src={linkedinIcon} href="#" />
       </div>
-      <div className="flex flex-col gap-4 absolute bottom-0 left-1/2 transform -translate-x-1/2">
-        <span className="flex flex-col justify-center items-center 2xl:block">
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
+        <span className="block min-w-max">
           <span className="text-gray-500 text-lg w-max">
             Don't have an account?{' '}
           </span>
