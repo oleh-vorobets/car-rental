@@ -20,12 +20,10 @@ const Login: React.FC = () => {
 
   function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
-    setIsError(true);
   }
 
   function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     setPassword(e.target.value);
-    setIsError(false);
   }
 
   return (
