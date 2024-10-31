@@ -1,11 +1,20 @@
-import Background from './pages/Auth/Background';
+import Login from './pages/Auth/Login/Login';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import NotFound from './pages/NotFound';
+
+const router = createBrowserRouter([
+  {
+    path: '/login',
+    element: <Login />
+  },
+  {
+    path: '*',
+    element: <NotFound />
+  }
+]);
 
 function App() {
-  return (
-    <Background footer={<div>Footer Content</div>}>
-      <h1 className="">Text</h1>
-    </Background>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
