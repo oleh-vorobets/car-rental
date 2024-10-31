@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../components/UI/Button';
+import LinkButton from '../components/UI/LinkButton';
 
 const NotFound: React.FC = () => {
   return (
@@ -10,9 +10,9 @@ const NotFound: React.FC = () => {
         The page you are looking for might have been removed had it's name
         changed or is temporarily unavaliable.
       </span>
-      <Button className="uppercase" buttonType="link">
+      <LinkButton className="uppercase" to="/login">
         Go to home page
-      </Button>
+      </LinkButton>
     </div>
   );
 };
