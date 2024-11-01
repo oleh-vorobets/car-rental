@@ -18,7 +18,7 @@ import UserSvg from '../../../assets/svgs/UserSvg';
 const Signup: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isError, setIsError] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
@@ -28,7 +28,9 @@ const Signup: React.FC = () => {
     setPassword(e.target.value);
   }
   return (
-    <Background image={signupCarImage} contentStyles="pt-8 pb-16 xl:pt-8">
+    <Background
+      image={signupCarImage}
+      contentStyles="pt-8 pb-16 xl:pt-8 xl:px-8">
       <div className={`${isError ? 'mb-6' : 'mb-10'}`}>
         <h1 className="font-oswald text-7xl font-semibold mb-2 max-[400px]:text-6xl">
           Welcome
@@ -79,7 +81,7 @@ const Signup: React.FC = () => {
         <ExternalLoginIcon src={facebookIcon} href="#" />
         <ExternalLoginIcon src={linkedinIcon} href="#" />
       </div>
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
+      <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 sm:bottom-0">
         <span className="block min-w-max">
           <span className="text-gray-500 text-lg w-max">
             Already have an account?{' '}
