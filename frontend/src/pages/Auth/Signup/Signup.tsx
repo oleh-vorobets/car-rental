@@ -1,5 +1,5 @@
 import Background from '../Background';
-import signupCarImage from '../../../assets/images/signup-car.jpg';
+import signupCarImage from '../../../assets/images/signup-car.jpeg';
 import { useState } from 'react';
 import ErrorMessage from '../../../components/UI/ErrorMessage';
 import Button from '../../../components/UI/Button';

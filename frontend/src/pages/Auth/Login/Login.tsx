@@ -16,7 +16,7 @@ import PasswordSvg from '../../../assets/svgs/PasswordSvg';
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isError, setIsError] = useState(false);
+  const [isError, setIsError] = useState(true);
 
   function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
