@@ -18,6 +18,8 @@ import UserSvg from '../../../assets/svgs/UserSvg';
 const Signup: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [isError, setIsError] = useState(false);
 
   function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -26,6 +28,14 @@ const Signup: React.FC = () => {
 
   function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     setPassword(e.target.value);
+  }
+
+  function handleFirstNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setFirstName(e.target.value);
+  }
+
+  function handleLastNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setLastName(e.target.value);
   }
   return (
     <Background
@@ -46,15 +56,15 @@ const Signup: React.FC = () => {
           <Input
             placeholder="First name"
             type="text"
-            value={password}
-            onChange={handlePasswordChange}
+            value={firstName}
+            onChange={handleFirstNameChange}
             svg={UserSvg}
           />
           <Input
             placeholder="Last name"
             type="text"
-            value={password}
-            onChange={handlePasswordChange}
+            value={lastName}
+            onChange={handleLastNameChange}
             svg={IdentificationSvg}
           />
         </div>
