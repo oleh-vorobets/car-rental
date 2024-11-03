@@ -1,10 +1,10 @@
-import Background from '../Background';
+import Background from '../../../components/Layout/Background';
 import signupCarImage from '../../../assets/images/signup-car.jpeg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ErrorMessage from '../../../components/UI/ErrorMessage';
 import Button from '../../../components/UI/Button';
 import Input from '../../../components/UI/Input';
-import { Link } from 'react-router-dom';
+import { Form, Link, useNavigate } from 'react-router-dom';
 import PasswordSvg from '../../../assets/svgs/PasswordSvg';
 import EmailSvg from '../../../assets/svgs/EmailSvg';
 import HR from '../../../components/UI/HR';
@@ -14,13 +14,17 @@ import facebookIcon from '../../../assets/icons/facebook.png';
 import linkedinIcon from '../../../assets/icons/linkedin.png';
 import IdentificationSvg from '../../../assets/svgs/IdentificationSvg';
 import UserSvg from '../../../assets/svgs/UserSvg';
+import { LoginError, useAuth } from '../../../providers/AuthProvider';
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [isError, setIsError] = useState(false);
+  const [isError, setError] = useState<LoginError>(LoginError.NONE);
+
+  const navigate = useNavigate();
+  const { signup, authenticated, loading } = useAuth();
 
   function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
@@ -37,6 +41,25 @@ const Signup: React.FC = () => {
   function handleLastNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     setLastName(e.target.value);
   }
+
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    const credentials = { email, password, firstName, lastName };
+    const resp = await signup(credentials);
+    if (resp !== LoginError.NONE) {
+      setError(LoginError.ERROR);
+    } else {
+      setError(LoginError.NONE);
+      navigate('/');
+    }
+  }
+
+  useEffect(() => {
+    document.title = 'Signup - Get the car of your dream!';
+
+    if (authenticated) navigate('/');
+  }, [authenticated, navigate]);
+
   return (
     <Background
       image={signupCarImage}
@@ -50,8 +73,12 @@ const Signup: React.FC = () => {
           <br className="hidden max-[400px]:block"></br> with us
         </p>
       </div>
-      {isError && <ErrorMessage>Invalid email or password!</ErrorMessage>}
-      <div className="flex flex-col gap-5 relative mb-6">
+      {isError !== LoginError.NONE && (
+        <ErrorMessage>Invalid email or password!</ErrorMessage>
+      )}
+      <Form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-5 relative mb-6">
         <div className="flex flex-col gap-4 sm:flex-row">
           <Input
             placeholder="First name"
@@ -83,8 +110,10 @@ const Signup: React.FC = () => {
           svg={PasswordSvg}
         />
 
-        <Button className="mt-6">Sign up now!</Button>
-      </div>
+        <Button className="mt-6" type="submit" disabled={loading}>
+          Sign up now!
+        </Button>
+      </Form>
       <HR containerClassName="mb-4">Or sign up with</HR>
       <div className="flex flex-row gap-14 items-center justify-center max-[360px]:gap-10">
         <ExternalLoginIcon src={googleIcon} href="#" />

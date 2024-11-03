@@ -28,7 +28,8 @@ const Background: React.FC<IBackground> = ({
             <img
               src={image}
               alt="Login Car"
-              className="w-full h-full object-cover transition-all duration-500 ease-in-out hover:scale-110 "></img>
+              className="w-full h-full object-cover transition-all duration-500 ease-in-out hover:scale-110"
+            />
           </figure>
         </section>
       </main>
