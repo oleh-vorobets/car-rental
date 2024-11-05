@@ -5,6 +5,7 @@ interface IInput {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
+  autoComplete?: string;
 }
 
 const Input: React.FC<IInput> = ({
@@ -13,7 +14,8 @@ const Input: React.FC<IInput> = ({
   type,
   value,
   onChange,
-  className
+  className,
+  autoComplete
 }) => {
   return (
     <div className="w-full min-w-[200px]">
@@ -24,6 +26,7 @@ const Input: React.FC<IInput> = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          autoComplete={autoComplete}
         />
 
         {svg && (
