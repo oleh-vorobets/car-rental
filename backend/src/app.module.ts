@@ -1,14 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { UserController } from './user/user.controller';
+import { UserModule } from './user/user.module';
 import * as Joi from 'joi';
-
+import { AtGuard } from './common/guards';
+import { ReqLoggingInterceptor } from './common/interceptors';
+import User from './user/entities/user.entity';
 @Module({
   imports: [
-    // CONFIG
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
@@ -22,10 +25,10 @@ import * as Joi from 'joi';
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
 
-        JWT_SECRET: Joi.string().required(),
+        ACCESS_TOKEN_SECRET: Joi.string().required(),
+        REFRESH_TOKEN_SECRET: Joi.string().required(),
       }),
     }),
-    //RATE LIMITER
     ThrottlerModule.forRoot([
       {
         name: 'short',
@@ -38,7 +41,6 @@ import * as Joi from 'joi';
         limit: 100,
       },
     ]),
-    // ORM
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -49,19 +51,21 @@ import * as Joi from 'joi';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
-        entities: [],
+        entities: [User],
         synchronize: true,
-        dropSchema: true,
       }),
     }),
     AuthModule,
+    UserModule,
   ],
-  controllers: [],
+  controllers: [UserController],
   providers: [
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
+    { provide: APP_GUARD, useClass: AtGuard },
+    { provide: APP_INTERCEPTOR, useClass: ReqLoggingInterceptor },
   ],
 })
 export class AppModule {}
