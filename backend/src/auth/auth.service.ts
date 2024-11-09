@@ -8,12 +8,14 @@ import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 import { Tokens } from './types';
 import { SignInDto, SignUpDto } from './dtos';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
   async signin({ email, password }: SignInDto): Promise<Tokens> {
     const user = await this.userService.findOneByEmail(email);
@@ -65,11 +67,11 @@ export class AuthService {
     const [access_token, refresh_token] = await Promise.all([
       this.jwtService.signAsync(payload, {
         expiresIn: '15m',
-        secret: 'at-secret',
+        secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
       }),
       this.jwtService.signAsync(payload, {
-        secret: 'rt-secret',
         expiresIn: '1y',
+        secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
       }),
     ]);
     return { access_token, refresh_token };
