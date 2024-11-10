@@ -1,5 +1,4 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
-import axios from 'axios';
 
 interface AuthContextType {
   loading: boolean;
@@ -24,10 +23,16 @@ export enum LoginError {
   ERROR = 'Error'
 }
 
+export enum ProviderEnum {
+  GOOGLE = 'google',
+  FACEBOOK = 'facebook',
+  LINKEDIN = 'linkedin',
+  LOCAL = 'local'
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [loading, isLoading] = useState(false);
   const [accessToken, setAccessToken] = useState('');
   const [user, setUser] = useState(null);
   const [error, setError] = useState<LoginError>(LoginError.NONE);
