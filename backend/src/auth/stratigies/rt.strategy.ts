@@ -14,14 +14,21 @@ export type JwtRefreshPayload = {
 export class RtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   constructor(private readonly configService: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req: Request) => {
+          return req?.cookies?.refreshToken;
+        },
+      ]),
       secretOrKey: configService.get<string>('REFRESH_TOKEN_SECRET'),
       passReqToCallback: true,
     });
   }
 
   validate(req: Request, payload: JwtRefreshPayload) {
-    const refreshToken = req.get('authorization').replace('Bearer', '').trim();
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) {
+      throw new Error('Refresh token not found in cookies');
+    }
     return { ...payload, refreshToken };
   }
 }
