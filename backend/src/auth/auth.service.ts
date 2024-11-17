@@ -70,7 +70,7 @@ export class AuthService {
         secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
       }),
       this.jwtService.signAsync(payload, {
-        expiresIn: '1y',
+        expiresIn: '30d',
         secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
       }),
     ]);
