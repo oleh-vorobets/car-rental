@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -10,6 +10,7 @@ import * as Joi from 'joi';
 import { AtGuard } from './common/guards';
 import { ReqLoggingInterceptor } from './common/interceptors';
 import User from './user/entities/user.entity';
+import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -66,6 +67,7 @@ import User from './user/entities/user.entity';
     },
     { provide: APP_GUARD, useClass: AtGuard },
     { provide: APP_INTERCEPTOR, useClass: ReqLoggingInterceptor },
+    { provide: APP_FILTER, useClass: GlobalExceptionFilter },
   ],
 })
 export class AppModule {}
