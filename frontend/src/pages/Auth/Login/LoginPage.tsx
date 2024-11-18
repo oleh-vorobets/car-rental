@@ -15,7 +15,7 @@ import PasswordSvg from '../../../assets/svgs/PasswordSvg';
 import { useAuth } from '../../../providers/AuthProvider/AuthProvider';
 import { LoginError } from '../../../providers/AuthProvider/types';
 
-const Login: React.FC = () => {
+const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -108,4 +108,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
