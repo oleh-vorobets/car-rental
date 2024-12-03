@@ -43,7 +43,7 @@ export const useLoginMutation = (
 export const useSignupMutation = (
   setAccessToken: React.Dispatch<React.SetStateAction<string>>,
   setError: React.Dispatch<React.SetStateAction<LoginError>>,
-  setAccountData: React.Dispatch<React.SetStateAction<IUser | null>>
+  _setAccountData: React.Dispatch<React.SetStateAction<IUser | null>>
 ) => {
   return useMutation({
     mutationKey: ['signup'],
@@ -78,7 +78,7 @@ export const useSignupMutation = (
 export const useLogoutMutation = (
   setAccessToken: React.Dispatch<React.SetStateAction<string>>,
   setError: React.Dispatch<React.SetStateAction<LoginError>>,
-  setAccountData: React.Dispatch<React.SetStateAction<IUser | null>>
+  _setAccountData: React.Dispatch<React.SetStateAction<IUser | null>>
 ) => {
   return useMutation({
     mutationKey: ['logout'],
