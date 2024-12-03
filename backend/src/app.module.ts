@@ -11,6 +11,11 @@ import { AtGuard } from './common/guards';
 import { ReqLoggingInterceptor } from './common/interceptors';
 import User from './user/entities/user.entity';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
+import { MailerModule } from './mailer/mailer.module';
+import {
+  MailerOptions,
+  MailerModule as NestMailerModule,
+} from '@nestjs-modules/mailer';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -56,8 +61,28 @@ import { GlobalExceptionFilter } from './common/filters/global-exception.filter'
         synchronize: true,
       }),
     }),
+    NestMailerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService): MailerOptions => {
+        return {
+          transport: {
+            host: configService.get<string>('MAIL_HOST'),
+            secure: false,
+            auth: {
+              user: configService.get<string>('MAIL_USERNAME'),
+              pass: configService.get<string>('MAIL_PASSWORD'),
+            },
+            defaults: {
+              from: '"Hooli - Car Rental Service"',
+            },
+          },
+        } as MailerOptions;
+      },
+    }),
     AuthModule,
     UserModule,
+    MailerModule,
   ],
   controllers: [UserController],
   providers: [
