@@ -1,8 +1,15 @@
-import { IsEmail, IsNotEmpty, MaxLength } from 'class-validator';
+import { IsJWT, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class ResetPasswordDto {
-  @IsEmail()
-  @MaxLength(255)
+  @IsJWT()
+  token: string;
+
+  @MinLength(8, {
+    message: 'password too short',
+  })
+  @MaxLength(20, {
+    message: 'password too long',
+  })
   @IsNotEmpty()
-  email: string;
+  password: string;
 }

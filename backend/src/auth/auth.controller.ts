@@ -12,16 +12,17 @@ import { AuthService } from './auth.service';
 import { AccessToken } from './types';
 import { RtGuard } from 'src/common/guards';
 import { CurrentUser, CurrentUserId, Public } from 'src/common/decorators';
-import { ResetPasswordDto, SignInDto, SignUpDto } from './dtos';
+import {
+  ForgotPasswordDto,
+  ResetPasswordDto,
+  SignInDto,
+  SignUpDto,
+} from './dtos';
 import { Response } from 'express';
-import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Public()
   @Post('signin')
@@ -93,10 +94,32 @@ export class AuthController {
     return { access_token };
   }
 
-  //TODO: Complete reset password route
   @Public()
-  @Post('password-reset')
-  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
-    return resetPasswordDto;
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return await this.authService.sendPasswordResetEmail(
+      forgotPasswordDto.email,
+    );
+  }
+
+  @Public()
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  async resetPassword(
+    @Body() resetPasswordDto: ResetPasswordDto,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<AccessToken> {
+    const { access_token, refresh_token } =
+      await this.authService.resetPassword(
+        resetPasswordDto.token,
+        resetPasswordDto.password,
+      );
+
+    response.setCookie('refreshToken', refresh_token, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
+
+    return { access_token };
   }
 }

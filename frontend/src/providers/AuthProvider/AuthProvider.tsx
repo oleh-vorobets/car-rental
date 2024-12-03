@@ -12,6 +12,7 @@ import {
   useSignupMutation
 } from '../../hooks/auth/useAuthMutations';
 import { authService } from '../../services/auth-service/AuthService';
+import { IUser } from '../../types/user.types';
 
 interface AuthContextType {
   loading: boolean;
@@ -39,27 +40,27 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState('');
-  // const [user, setUser] = useState(null);
   const [error, setError] = useState<LoginError>(LoginError.NONE);
   const [loading, isLoading] = useState<boolean>(false);
+  const [accountData, setAccountData] = useState<IUser | null>(null);
 
   const {
     error: loginError,
     status: loginStatus,
     mutate: loginMutate
-  } = useLoginMutation(setAccessToken, setError);
+  } = useLoginMutation(setAccessToken, setError, setAccountData);
 
   const {
     error: signupError,
     status: signupStatus,
     mutate: signupMutate
-  } = useSignupMutation(setAccessToken, setError);
+  } = useSignupMutation(setAccessToken, setError, setAccountData);
 
   const {
     error: logoutError,
     status: logoutStatus,
     mutate: logoutMutate
-  } = useLogoutMutation(setAccessToken, setError);
+  } = useLogoutMutation(setAccessToken, setError, setAccountData);
 
   const login = async (credentials: LoginPayload) => {
     loginMutate(credentials);
@@ -82,7 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           window.location.href = '/';
         }
       }
-    } catch (_err: unknown) {
+    } catch (_err: any) {
       setError(LoginError.ERROR);
       setAccessToken('');
     }

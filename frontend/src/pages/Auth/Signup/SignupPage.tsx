@@ -17,7 +17,7 @@ import UserSvg from '../../../assets/svgs/UserSvg';
 import { useAuth } from '../../../providers/AuthProvider/AuthProvider';
 import { LoginError } from '../../../providers/AuthProvider/types';
 
-const Signup: React.FC = () => {
+const SignupPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -128,4 +128,4 @@ const Signup: React.FC = () => {
     </Background>
   );
 };
-export default Signup;
+export default SignupPage;

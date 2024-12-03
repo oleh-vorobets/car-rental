@@ -51,7 +51,7 @@ export const AxiosProvider = ({ children }: { children: ReactNode }) => {
             'Authorization'
           ] = `Bearer ${newToken?.data.access_token}`;
 
-          return authAxios(originalRequest); // Repeat request with new token
+          return authAxios(originalRequest);
         } catch (refreshError) {
           console.error('Error refreshing token:', refreshError);
           await authService.logout();
