@@ -62,5 +62,20 @@ export const authService = {
 
       //TODO: ADD ERROR HANDLER
     }
+  },
+
+  sendForgotPassword: async (email: string) => {
+    try {
+      const { data } = await publicAxios.post<void>(
+        hostname + '/auth/forgot-password',
+        { email }
+      );
+      return data;
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        throw new Error('User not found');
+      }
+      throw error;
+    }
   }
 };

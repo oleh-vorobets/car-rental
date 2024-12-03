@@ -6,10 +6,13 @@ import {
 } from '../../providers/AuthProvider/types';
 import { AuthResponse } from '../../services/auth-service/types';
 import { authService } from '../../services/auth-service/AuthService';
+import { IUser } from '../../types/user.types';
+import { userService } from '../../services/user-service/UserService';
 
 export const useLoginMutation = (
   setAccessToken: React.Dispatch<React.SetStateAction<string>>,
-  setError: React.Dispatch<React.SetStateAction<LoginError>>
+  setError: React.Dispatch<React.SetStateAction<LoginError>>,
+  setAccountData: React.Dispatch<React.SetStateAction<IUser | null>>
 ) => {
   return useMutation({
     mutationKey: ['login'],
@@ -24,9 +27,12 @@ export const useLoginMutation = (
       return res.data;
     },
 
-    onSuccess: (data: AuthResponse) => {
+    onSuccess: async (data: AuthResponse) => {
       const { access_token } = data;
       setAccessToken(access_token);
+
+      const user = await userService.getMe();
+      setAccountData(user);
     },
     onError: (_err: Error) => {
       setError(LoginError.ERROR);
@@ -36,7 +42,8 @@ export const useLoginMutation = (
 
 export const useSignupMutation = (
   setAccessToken: React.Dispatch<React.SetStateAction<string>>,
-  setError: React.Dispatch<React.SetStateAction<LoginError>>
+  setError: React.Dispatch<React.SetStateAction<LoginError>>,
+  setAccountData: React.Dispatch<React.SetStateAction<IUser | null>>
 ) => {
   return useMutation({
     mutationKey: ['signup'],
@@ -70,7 +77,8 @@ export const useSignupMutation = (
 
 export const useLogoutMutation = (
   setAccessToken: React.Dispatch<React.SetStateAction<string>>,
-  setError: React.Dispatch<React.SetStateAction<LoginError>>
+  setError: React.Dispatch<React.SetStateAction<LoginError>>,
+  setAccountData: React.Dispatch<React.SetStateAction<IUser | null>>
 ) => {
   return useMutation({
     mutationKey: ['logout'],
