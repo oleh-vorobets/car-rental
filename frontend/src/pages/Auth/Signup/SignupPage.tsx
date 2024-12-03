@@ -14,17 +14,17 @@ import facebookIcon from '../../../assets/icons/facebook.png';
 import linkedinIcon from '../../../assets/icons/linkedin.png';
 import IdentificationSvg from '../../../assets/svgs/IdentificationSvg';
 import UserSvg from '../../../assets/svgs/UserSvg';
-import { LoginError, useAuth } from '../../../providers/AuthProvider';
+import { useAuth } from '../../../providers/AuthProvider/AuthProvider';
+import { LoginError } from '../../../providers/AuthProvider/types';
 
-const Signup: React.FC = () => {
+const SignupPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [isError, setError] = useState<LoginError>(LoginError.NONE);
 
   const navigate = useNavigate();
-  const { signup, authenticated, loading } = useAuth();
+  const { signup, loading, error } = useAuth();
 
   function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
@@ -45,26 +45,19 @@ const Signup: React.FC = () => {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     const credentials = { email, password, firstName, lastName };
-    const resp = await signup(credentials);
-    if (resp !== LoginError.NONE) {
-      setError(LoginError.ERROR);
-    } else {
-      setError(LoginError.NONE);
-      navigate('/');
-    }
+    await signup(credentials);
+    if (error === LoginError.NONE) navigate('/');
   }
 
   useEffect(() => {
     document.title = 'Signup - Get the car of your dream!';
-
-    if (authenticated) navigate('/');
-  }, [authenticated, navigate]);
+  }, []);
 
   return (
     <Background
       image={signupCarImage}
       contentStyles="pt-8 pb-16 xl:pt-8 xl:px-8">
-      <div className={`${isError ? 'mb-6' : 'mb-10'}`}>
+      <div className={`${error ? 'mb-6' : 'mb-10'}`}>
         <h1 className="font-oswald text-7xl font-semibold mb-2 max-[400px]:text-6xl">
           Welcome
         </h1>
@@ -73,7 +66,7 @@ const Signup: React.FC = () => {
           <br className="hidden max-[400px]:block"></br> with us
         </p>
       </div>
-      {isError !== LoginError.NONE && (
+      {error !== LoginError.NONE && (
         <ErrorMessage>Invalid email or password!</ErrorMessage>
       )}
       <Form
@@ -135,4 +128,4 @@ const Signup: React.FC = () => {
     </Background>
   );
 };
-export default Signup;
+export default SignupPage;

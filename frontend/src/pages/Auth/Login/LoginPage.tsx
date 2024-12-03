@@ -12,14 +12,14 @@ import { useEffect, useState } from 'react';
 import ErrorMessage from '../../../components/UI/ErrorMessage';
 import EmailSvg from '../../../assets/svgs/EmailSvg';
 import PasswordSvg from '../../../assets/svgs/PasswordSvg';
-import { LoginError, useAuth } from '../../../providers/AuthProvider';
+import { useAuth } from '../../../providers/AuthProvider/AuthProvider';
+import { LoginError } from '../../../providers/AuthProvider/types';
 
-const Login: React.FC = () => {
+const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isError, setError] = useState<LoginError>(LoginError.NONE);
 
-  const { authenticated, login, loading } = useAuth();
+  const { login, loading, error } = useAuth();
 
   const navigate = useNavigate();
 
@@ -34,25 +34,17 @@ const Login: React.FC = () => {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     const credentials = { email, password };
-    const resp = await login(credentials);
-
-    if (resp !== LoginError.NONE) {
-      setError(LoginError.ERROR);
-    } else {
-      setError(LoginError.NONE);
-      navigate('/');
-    }
+    await login(credentials);
+    if (error === LoginError.NONE) navigate('/');
   }
 
   useEffect(() => {
     document.title = 'Login - Get the car of your dream!';
-
-    if (authenticated) navigate('/');
-  }, [authenticated, navigate]);
+  }, []);
 
   return (
     <Background image={loginCarImage}>
-      <div className={`${isError ? 'mb-6' : 'mb-10'}`}>
+      <div className={`${error ? 'mb-6' : 'mb-10'}`}>
         <h1 className="font-oswald text-7xl font-semibold mb-2 max-[400px]:text-6xl">
           Welcome
         </h1>
@@ -61,7 +53,7 @@ const Login: React.FC = () => {
           <br className="hidden max-[400px]:block"></br> with us
         </p>
       </div>
-      {isError !== LoginError.NONE && (
+      {error !== LoginError.NONE && (
         <ErrorMessage>Invalid email or password!</ErrorMessage>
       )}
       <Form
@@ -116,4 +108,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
@@ -10,6 +10,12 @@ import * as Joi from 'joi';
 import { AtGuard } from './common/guards';
 import { ReqLoggingInterceptor } from './common/interceptors';
 import User from './user/entities/user.entity';
+import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
+import { MailerModule } from './mailer/mailer.module';
+import {
+  MailerOptions,
+  MailerModule as NestMailerModule,
+} from '@nestjs-modules/mailer';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -55,8 +61,28 @@ import User from './user/entities/user.entity';
         synchronize: true,
       }),
     }),
+    NestMailerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService): MailerOptions => {
+        return {
+          transport: {
+            host: configService.get<string>('MAIL_HOST'),
+            secure: false,
+            auth: {
+              user: configService.get<string>('MAIL_USERNAME'),
+              pass: configService.get<string>('MAIL_PASSWORD'),
+            },
+            defaults: {
+              from: '"Hooli - Car Rental Service"',
+            },
+          },
+        } as MailerOptions;
+      },
+    }),
     AuthModule,
     UserModule,
+    MailerModule,
   ],
   controllers: [UserController],
   providers: [
@@ -66,6 +92,7 @@ import User from './user/entities/user.entity';
     },
     { provide: APP_GUARD, useClass: AtGuard },
     { provide: APP_INTERCEPTOR, useClass: ReqLoggingInterceptor },
+    { provide: APP_FILTER, useClass: GlobalExceptionFilter },
   ],
 })
 export class AppModule {}
