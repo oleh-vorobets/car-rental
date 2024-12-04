@@ -7,12 +7,14 @@ import LogoImage from '../../../assets/icons/hooli.png';
 import PasswordSvg from '../../../assets/svgs/PasswordSvg';
 import { authService } from '../../../services/auth-service/AuthService';
 import toast from 'react-hot-toast';
+import { useAuth } from '../../../providers/AuthProvider/AuthProvider';
 
 const ResetPasswordPage: React.FC = () => {
   const { token } = useParams();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isError, setIsError] = useState(false);
+  const { resetPassword } = useAuth();
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -25,10 +27,8 @@ const ResetPasswordPage: React.FC = () => {
           'There is no token. Please try again go through link!'
         );
       }
-      const { access_token } = await authService.sendResetPassword(
-        token,
-        password
-      );
+
+      await resetPassword({ token, password });
 
       toast.success('Password was successfully reseted!');
     } catch (error: any) {

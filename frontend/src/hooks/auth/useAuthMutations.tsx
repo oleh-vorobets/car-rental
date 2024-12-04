@@ -8,6 +8,7 @@ import { AuthResponse } from '../../services/auth-service/types';
 import { authService } from '../../services/auth-service/AuthService';
 import { IUser } from '../../types/user.types';
 import { userService } from '../../services/user-service/UserService';
+import { ISendReset } from '../../types/auth.types';
 
 export const useLoginMutation = (
   setAccessToken: React.Dispatch<React.SetStateAction<string>>,
@@ -92,6 +93,27 @@ export const useLogoutMutation = (
     },
     onSuccess: () => {
       setAccessToken('');
+    },
+    onError: (_err: Error) => {
+      setError(LoginError.ERROR);
+    }
+  });
+};
+
+export const useResetMutation = (
+  setAccessToken: React.Dispatch<React.SetStateAction<string>>,
+  setError: React.Dispatch<React.SetStateAction<LoginError>>,
+  _setAccountData: React.Dispatch<React.SetStateAction<IUser | null>>
+) => {
+  return useMutation({
+    mutationKey: ['reset-password'],
+    mutationFn: async (payload: ISendReset): Promise<AuthResponse> => {
+      const data = await authService.sendResetPassword(payload);
+      return data;
+    },
+    onSuccess: (data: AuthResponse) => {
+      const { access_token } = data;
+      setAccessToken(access_token);
     },
     onError: (_err: Error) => {
       setError(LoginError.ERROR);

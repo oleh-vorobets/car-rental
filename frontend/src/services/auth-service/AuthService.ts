@@ -3,6 +3,7 @@ import {
   hostname,
   publicAxios
 } from '../../providers/AxiosProvider';
+import { ISendReset } from '../../types/auth.types';
 import { AuthResponse } from './types';
 
 export const authService = {
@@ -79,11 +80,11 @@ export const authService = {
     }
   },
 
-  sendResetPassword: async (token: string, password: string) => {
+  sendResetPassword: async (payload: ISendReset) => {
     try {
       const { data } = await publicAxios.post<AuthResponse>(
         hostname + '/auth/reset-password',
-        { token, password }
+        payload
       );
       return data;
     } catch (error: any) {

@@ -9,10 +9,12 @@ import { LoginError, LoginPayload, SignupPayload } from './types';
 import {
   useLoginMutation,
   useLogoutMutation,
+  useResetMutation,
   useSignupMutation
 } from '../../hooks/auth/useAuthMutations';
 import { authService } from '../../services/auth-service/AuthService';
 import { IUser } from '../../types/user.types';
+import { ISendReset } from '../../types/auth.types';
 
 interface AuthContextType {
   loading: boolean;
@@ -27,6 +29,8 @@ interface AuthContextType {
   }) => Promise<void>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
+
+  resetPassword: (payload: ISendReset) => Promise<void>;
 }
 
 // export enum ProviderEnum {
@@ -62,6 +66,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     mutate: logoutMutate
   } = useLogoutMutation(setAccessToken, setError, setAccountData);
 
+  const {
+    error: resetError,
+    status: resetStatus,
+    mutate: resetMutate
+  } = useResetMutation(setAccessToken, setError, setAccountData);
+
   const login = async (credentials: LoginPayload) => {
     loginMutate(credentials);
   };
@@ -93,32 +103,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     logoutMutate();
   };
 
+  const resetPassword = async (payload: ISendReset) => {
+    resetMutate(payload);
+  };
+
   useEffect(() => {
     refresh();
   }, []);
 
-  useEffect(() => {
-    isLoading(
-      () =>
-        loginStatus === 'pending' ||
-        signupStatus === 'pending' ||
-        logoutStatus === 'pending'
-    );
-    setError(
-      (loginError ? LoginError.ERROR : LoginError.NONE) ||
-        (signupError ? LoginError.ERROR : LoginError.NONE) ||
-        (logoutError ? LoginError.ERROR : LoginError.NONE)
-    );
-  }, [
-    loginStatus,
-    isLoading,
-    setError,
-    loginError,
-    signupStatus,
-    signupError,
-    logoutError,
-    logoutStatus
-  ]);
+  // useEffect(() => {
+  //   isLoading(
+  //     () =>
+  //       loginStatus === 'pending' ||
+  //       signupStatus === 'pending' ||
+  //       logoutStatus === 'pending'
+  //   );
+  //   setError(
+  //     (loginError ? LoginError.ERROR : LoginError.NONE) ||
+  //       (signupError ? LoginError.ERROR : LoginError.NONE) ||
+  //       (logoutError ? LoginError.ERROR : LoginError.NONE)
+  //   );
+  // }, [
+  //   loginStatus,
+  //   isLoading,
+  //   setError,
+  //   loginError,
+  //   signupStatus,
+  //   signupError,
+  //   logoutError,
+  //   logoutStatus
+  // ]);
 
   return (
     <AuthContext.Provider
@@ -127,6 +141,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         signup,
         logout,
         refresh,
+        resetPassword,
         loading,
         accessToken,
         error
