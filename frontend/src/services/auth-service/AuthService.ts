@@ -77,5 +77,20 @@ export const authService = {
       }
       throw error;
     }
+  },
+
+  sendResetPassword: async (token: string, password: string) => {
+    try {
+      const { data } = await publicAxios.post<AuthResponse>(
+        hostname + '/auth/reset-password',
+        { token, password }
+      );
+      return data;
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        throw new Error('User not found');
+      }
+      throw error;
+    }
   }
 };
