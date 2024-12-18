@@ -1,7 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import { createContext, ReactNode } from 'react';
-import { useAuth } from './AuthProvider/AuthProvider';
-import { authService } from '../services/auth-service/AuthService';
+import { useAuthContext } from './AuthProvider';
+import { authService } from '../services/auth-service/auth.service';
 
 const AxiosContext = createContext(undefined);
 
@@ -20,7 +20,7 @@ export const publicAxios = axios.create({
   withCredentials: true
 });
 export const AxiosProvider = ({ children }: { children: ReactNode }) => {
-  const { accessToken } = useAuth();
+  const { accessToken, setAccessToken } = useAuthContext();
 
   authAxios.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
@@ -47,9 +47,16 @@ export const AxiosProvider = ({ children }: { children: ReactNode }) => {
         try {
           const newToken = await authService.refresh();
 
+          if (!newToken) {
+            console.error('Empty token returned');
+            return await authService.logout();
+          }
+
+          setAccessToken(newToken?.access_token);
+
           originalRequest.headers[
             'Authorization'
-          ] = `Bearer ${newToken?.data.access_token}`;
+          ] = `Bearer ${newToken?.access_token}`;
 
           return authAxios(originalRequest);
         } catch (refreshError) {

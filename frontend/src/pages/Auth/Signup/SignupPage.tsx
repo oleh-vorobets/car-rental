@@ -1,10 +1,9 @@
 import Background from '../../../components/Layout/Background';
 import signupCarImage from '../../../assets/images/signup-car.jpeg';
 import { useEffect, useState } from 'react';
-import ErrorMessage from '../../../components/UI/ErrorMessage';
 import Button from '../../../components/UI/Button';
 import Input from '../../../components/UI/Input';
-import { Form, Link, useNavigate } from 'react-router-dom';
+import { Form, Link } from 'react-router-dom';
 import PasswordSvg from '../../../assets/svgs/PasswordSvg';
 import EmailSvg from '../../../assets/svgs/EmailSvg';
 import HR from '../../../components/UI/HR';
@@ -14,24 +13,43 @@ import facebookIcon from '../../../assets/icons/facebook.png';
 import linkedinIcon from '../../../assets/icons/linkedin.png';
 import IdentificationSvg from '../../../assets/svgs/IdentificationSvg';
 import UserSvg from '../../../assets/svgs/UserSvg';
-import { useAuth } from '../../../providers/AuthProvider/AuthProvider';
-import { LoginError } from '../../../providers/AuthProvider/types';
+import { useAuth } from '../../../hooks/useAuth';
+import { useTitle } from '../../../hooks/useTitle';
+import { urls } from '../../../constants/urls';
+import { isPasswordStrong } from '../../../utils/isPasswordStrong';
+import ErrorMessage from '../../../components/UI/ErrorMessage';
+import toast from 'react-hot-toast';
 
+interface IError {
+  isError: boolean;
+  message: string;
+}
 const SignupPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-
-  const navigate = useNavigate();
-  const { signup, loading, error } = useAuth();
+  const [error, setError] = useState<IError>({
+    isError: false,
+    message: ''
+  });
+  const { signupMutation, isSignupError, isSignupPending } = useAuth();
+  useTitle('Signup - Get the car of your dream!');
 
   function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
+    setError({
+      isError: false,
+      message: ''
+    });
   }
 
   function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     setPassword(e.target.value);
+    setError({
+      isError: false,
+      message: ''
+    });
   }
 
   function handleFirstNameChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -42,22 +60,37 @@ const SignupPage: React.FC = () => {
     setLastName(e.target.value);
   }
 
-  async function handleSubmit(event: React.FormEvent) {
+  function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     const credentials = { email, password, firstName, lastName };
-    await signup(credentials);
-    if (error === LoginError.NONE) navigate('/');
+    const isPasswordStrongEnough = isPasswordStrong(password);
+    if (isPasswordStrongEnough) {
+      signupMutation(credentials);
+    } else {
+      setError({
+        isError: true,
+        message: "The password isn't strong enough!"
+      });
+      toast.error(
+        'Password should contain 8 characters, including uppercase and lowercase letters, as well as a number',
+        { duration: 8000 }
+      );
+    }
   }
 
   useEffect(() => {
-    document.title = 'Signup - Get the car of your dream!';
-  }, []);
+    if (isSignupError)
+      setError({
+        isError: true,
+        message: 'Account with such email already registered!'
+      });
+  }, [isSignupError]);
 
   return (
     <Background
       image={signupCarImage}
       contentStyles="pt-8 pb-16 xl:pt-8 xl:px-8">
-      <div className={`${error ? 'mb-6' : 'mb-10'}`}>
+      <div className={`${isSignupError ? 'mb-6' : 'mb-10'}`}>
         <h1 className="font-oswald text-7xl font-semibold mb-2 max-[400px]:text-6xl">
           Welcome
         </h1>
@@ -66,9 +99,6 @@ const SignupPage: React.FC = () => {
           <br className="hidden max-[400px]:block"></br> with us
         </p>
       </div>
-      {error !== LoginError.NONE && (
-        <ErrorMessage>Invalid email or password!</ErrorMessage>
-      )}
       <Form
         onSubmit={handleSubmit}
         className="flex flex-col gap-5 relative mb-6">
@@ -102,8 +132,9 @@ const SignupPage: React.FC = () => {
           onChange={handlePasswordChange}
           svg={PasswordSvg}
         />
+        {error.isError && <ErrorMessage>{error.message}</ErrorMessage>}
 
-        <Button className="mt-6" type="submit" disabled={loading}>
+        <Button className="mt-6" type="submit" disabled={isSignupPending}>
           Sign up now!
         </Button>
       </Form>
@@ -119,7 +150,7 @@ const SignupPage: React.FC = () => {
             Already have an account?{' '}
           </span>
           <Link
-            to="/login"
+            to={urls.login}
             className="text-gray-400 hover:text-gray-500 transition-all ease-in-out duration-300 w-max border-b-[0.1rem] border-gray-400 hover:border-gray-500 text-lg focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-opacity-60 focus:ring-offset-[3px]">
             Login
           </Link>
