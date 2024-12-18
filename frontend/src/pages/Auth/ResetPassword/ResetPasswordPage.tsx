@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Link, useParams } from 'react-router-dom';
 import Icon from '../../../components/UI/Icon';
 import Input from '../../../components/UI/Input';
 import Button from '../../../components/UI/Button';
 import LogoImage from '../../../assets/icons/hooli.png';
 import PasswordSvg from '../../../assets/svgs/PasswordSvg';
-import { authService } from '../../../services/auth-service/AuthService';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../../providers/AuthProvider/AuthProvider';
+import { useAuth } from '../../../hooks/useAuth';
+import { useTitle } from '../../../hooks/useTitle';
+import ErrorMessage from '../../../components/UI/ErrorMessage';
 
 const ResetPasswordPage: React.FC = () => {
   const { token } = useParams();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isError, setIsError] = useState(false);
-  const { resetPassword } = useAuth();
+  const {
+    resetPasswordMutation,
+    isResetPasswordPending,
+    isResetPasswordError
+  } = useAuth();
+  useTitle('Reset password - Get the car of your dream!');
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -28,13 +34,17 @@ const ResetPasswordPage: React.FC = () => {
         );
       }
 
-      await resetPassword({ token, password });
-
-      toast.success('Password was successfully reseted!');
+      resetPasswordMutation({ token, password });
     } catch (error: any) {
-      toast.error(error.message || 'An unexpected error occurred.');
+      toast.error(
+        error.message || 'An unexpected error occurred. Try again later...'
+      );
     }
   }
+
+  useEffect(() => {
+    if (isResetPasswordError) setIsError(true);
+  }, [isResetPasswordError]);
 
   return (
     <div className="min-h-screen max-w-screen bg-back-main flex justify-center items-center">
@@ -54,21 +64,40 @@ const ResetPasswordPage: React.FC = () => {
           <div className="w-full flex flex-col gap-2">
             <div className="flex flex-col gap-4">
               <Input
+                className={`${
+                  isError &&
+                  'border-error border-2 hover:border-inherit focus:border-inherit'
+                }`}
                 placeholder="Password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setIsError(false);
+                }}
                 svg={PasswordSvg}
                 autoComplete="password"
               />
               <Input
+                className={`${
+                  isError &&
+                  'border-error border-2 hover:border-inherit focus:border-inherit'
+                }`}
                 placeholder="Confirm Password"
                 type="password"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  setIsError(false);
+                }}
                 svg={PasswordSvg}
                 autoComplete="confirm-password"
               />
+              {isError && (
+                <ErrorMessage>
+                  Invalid email or password. Try again
+                </ErrorMessage>
+              )}
             </div>
             <Link
               to="/support"
@@ -76,7 +105,9 @@ const ResetPasswordPage: React.FC = () => {
               Need support?
             </Link>
           </div>
-          <Button className="w-full">Create password</Button>
+          <Button className="w-full" disabled={isResetPasswordPending}>
+            Create password
+          </Button>
         </Form>
       </div>
     </div>

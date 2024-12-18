@@ -4,15 +4,16 @@ import NotFoundPage from './pages/NotFoundPage';
 import SignupPage from './pages/Auth/Signup/SignupPage';
 import ForgotPasswordPage from './pages/Auth/ForgotPassword/ForgotPasswordPage';
 import ResetPasswordPage from './pages/Auth/ResetPassword/ResetPasswordPage';
+import { urls } from './constants/urls';
 
 const router = createBrowserRouter([
   {
-    path: '/login',
+    path: urls.login,
     element: <LoginPage />
   },
-  { path: '/signup', element: <SignupPage /> },
-  { path: '/forgot-password', element: <ForgotPasswordPage /> },
-  { path: '/reset-password', element: <ResetPasswordPage /> },
+  { path: urls.signup, element: <SignupPage /> },
+  { path: urls.forgotPassword, element: <ForgotPasswordPage /> },
+  { path: urls.resetPassword, element: <ResetPasswordPage /> },
   {
     path: '*',
     element: <NotFoundPage />

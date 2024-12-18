@@ -1,5 +1,6 @@
 import React from 'react';
 import LinkButton from '../components/UI/LinkButton';
+import { urls } from '../constants/urls';
 
 const NotFoundPage: React.FC = () => {
   return (
@@ -10,7 +11,7 @@ const NotFoundPage: React.FC = () => {
         The page you are looking for might have been removed had it's name
         changed or is temporarily unavaliable.
       </span>
-      <LinkButton className="uppercase" to="/login">
+      <LinkButton className="uppercase" to={urls.home}>
         Go to home page
       </LinkButton>
     </div>
