@@ -6,16 +6,19 @@ interface ISearchInput {
   className?: string;
   onChange: (v: string) => void;
   value: string;
+  containerClassName?: string;
 }
 
 const SearchInput: React.FC<ISearchInput> = ({
   value,
   placeholder,
   className,
-  onChange
+  onChange,
+  containerClassName
 }) => {
   return (
-    <div className="relative w-[36rem] justify-center items-center flex">
+    <div
+      className={`relative justify-center items-center flex ${containerClassName}`}>
       <input
         onChange={(e) => onChange(e.target.value)}
         value={value}
