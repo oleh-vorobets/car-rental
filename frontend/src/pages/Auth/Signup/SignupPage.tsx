@@ -1,4 +1,4 @@
-import Background from '../../../components/Layout/Background';
+import AuthLayout from '../../../layouts/AuthLayout';
 import signupCarImage from '../../../assets/images/signup-car.jpeg';
 import { useEffect, useState } from 'react';
 import Button from '../../../components/UI/Button';
@@ -87,7 +87,7 @@ const SignupPage: React.FC = () => {
   }, [isSignupError]);
 
   return (
-    <Background
+    <AuthLayout
       image={signupCarImage}
       contentStyles="pt-8 pb-16 xl:pt-8 xl:px-8">
       <div className={`${isSignupError ? 'mb-6' : 'mb-10'}`}>
@@ -156,7 +156,7 @@ const SignupPage: React.FC = () => {
           </Link>
         </span>
       </div>
-    </Background>
+    </AuthLayout>
   );
 };
 export default SignupPage;

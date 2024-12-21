@@ -1,6 +1,6 @@
 import Button from '../../../components/UI/Button';
 import Input from '../../../components/UI/Input';
-import Background from '../../../components/Layout/Background';
+import AuthLayout from '../../../layouts/AuthLayout';
 import loginCarImage from '../../../assets/images/login-car.jpeg';
 import { Form, Link } from 'react-router-dom';
 import googleIcon from '../../../assets/icons/google.png';
@@ -46,7 +46,7 @@ const LoginPage: React.FC = () => {
   }, [isLoginError]);
 
   return (
-    <Background image={loginCarImage}>
+    <AuthLayout image={loginCarImage}>
       <div className={`${isLoginError ? 'mb-6' : 'mb-10'}`}>
         <h1 className="font-oswald text-7xl font-semibold mb-2 max-[400px]:text-6xl">
           Welcome
@@ -115,7 +115,7 @@ const LoginPage: React.FC = () => {
           </Link>
         </span>
       </div>
-    </Background>
+    </AuthLayout>
   );
 };
 
