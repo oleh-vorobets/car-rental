@@ -57,7 +57,7 @@ const ForgotPasswordPage: React.FC = () => {
           onSubmit={handleSubmit}>
           <div className="flex flex-col gap-2">
             <div className="flex justify-center mb-8">
-              <Icon image={LogoImage} />
+              <Icon image={LogoImage} className="w-64" />
             </div>
             <h1 className="text-3xl font-bold">Reset your password</h1>
             <h3 className="text-xl font-normal">

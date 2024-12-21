@@ -7,7 +7,7 @@ interface IIcon {
 const Icon: React.FC<IIcon> = ({ image, className, onClick }) => {
   return (
     <div
-      className={`w-64 relative overflow-hidden ${className}`}
+      className={`relative overflow-hidden ${className}`}
       style={{ aspectRatio: '2 / 1' }}
       onClick={onClick}>
       <img
