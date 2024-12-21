@@ -1,11 +1,12 @@
 interface IIcon {
   image: string;
+  className?: string;
 }
 
-const Icon: React.FC<IIcon> = ({ image }) => {
+const Icon: React.FC<IIcon> = ({ image, className }) => {
   return (
     <div
-      className="w-64 relative overflow-hidden"
+      className={`w-64 relative overflow-hidden ${className}`}
       style={{ aspectRatio: '2 / 1' }}>
       <img
         src={image}

@@ -17,7 +17,7 @@ const AuthLayout: React.FC<IAuthLayout> = ({
   return (
     <>
       <main
-        className="min-h-screen max-w-screen bg-back-white flex justify-center items-center sm:bg-back-main"
+        className="min-h-screen max-w-screen bg-back-white flex justify-center items-center sm:bg-bg-primary"
         style={style}>
         <section className="bg-white p-6 rounded-0 w-full h-[750px] flex gap-4 m-0 justify-center sm:rounded-[4rem] sm:w-11/12 sm:m-10 max-[400px]:p-2">
           <article
