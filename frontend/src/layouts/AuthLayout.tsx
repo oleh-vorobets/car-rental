@@ -1,4 +1,4 @@
-interface IBackground {
+interface IAuthLayout {
   children: React.ReactNode;
   footer?: React.ReactNode;
   image: string;
@@ -7,7 +7,7 @@ interface IBackground {
   contentStyles?: string;
 }
 
-const Background: React.FC<IBackground> = ({
+const AuthLayout: React.FC<IAuthLayout> = ({
   children,
   footer,
   image,
@@ -41,4 +41,4 @@ const Background: React.FC<IBackground> = ({
     </>
   );
 };
-export default Background;
+export default AuthLayout;

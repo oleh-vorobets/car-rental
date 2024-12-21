@@ -1,5 +1,6 @@
 import React from 'react';
 import LinkButton from '../components/UI/LinkButton';
+import { urls } from '../constants/urls';
 
 const ErrorPage: React.FC = () => {
   return (
@@ -10,7 +11,7 @@ const ErrorPage: React.FC = () => {
         We're sorry, but something went wrong. Please try again later or return
         to the home page.
       </span>
-      <LinkButton className="uppercase" to="/">
+      <LinkButton className="uppercase" to={urls.home}>
         Go to home page
       </LinkButton>
     </div>

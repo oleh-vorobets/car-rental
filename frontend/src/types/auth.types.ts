@@ -1,3 +1,12 @@
+export interface ISendResetPassword {
+  token: string;
+  password: string;
+}
+
+export interface ISendForgotPassword {
+  email: string;
+}
+
 export interface LoginPayload {
   email: string;
   password: string;
@@ -8,9 +17,4 @@ export interface SignupPayload {
   password: string;
   firstName: string;
   lastName: string;
-}
-
-export enum LoginError {
-  NONE = '',
-  ERROR = 'Error'
 }
