@@ -5,6 +5,8 @@ import SignupPage from './pages/Auth/Signup/SignupPage';
 import ForgotPasswordPage from './pages/Auth/ForgotPassword/ForgotPasswordPage';
 import ResetPasswordPage from './pages/Auth/ResetPassword/ResetPasswordPage';
 import { urls } from './constants/urls';
+import ControlLayout from './layouts/ControllLayout';
+import HomePage from './pages/App/Home';
 
 const router = createBrowserRouter([
   {
@@ -14,6 +16,11 @@ const router = createBrowserRouter([
   { path: urls.signup, element: <SignupPage /> },
   { path: urls.forgotPassword, element: <ForgotPasswordPage /> },
   { path: urls.resetPassword, element: <ResetPasswordPage /> },
+  {
+    path: urls.home,
+    element: <ControlLayout />,
+    children: [{ path: urls.home, element: <HomePage /> }]
+  },
   {
     path: '*',
     element: <NotFoundPage />

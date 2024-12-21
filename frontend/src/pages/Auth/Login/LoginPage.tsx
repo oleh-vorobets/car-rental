@@ -25,12 +25,10 @@ const LoginPage: React.FC = () => {
 
   function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
-    setIsError(false);
   }
 
   function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     setPassword(e.target.value);
-    setIsError(false);
   }
 
   function handleSubmit(event: React.FormEvent) {
@@ -85,7 +83,9 @@ const LoginPage: React.FC = () => {
             }`}
           />
           {isError && (
-            <ErrorMessage>Invalid email or password. Try again</ErrorMessage>
+            <ErrorMessage className="">
+              Invalid email or password. Try again
+            </ErrorMessage>
           )}
           <Link
             to={urls.forgotPassword}
