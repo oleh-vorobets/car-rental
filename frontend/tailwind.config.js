@@ -8,7 +8,12 @@ export default {
         roboto: ['Roboto', 'sans-serif']
       },
       colors: {
-        'back-main': '#f0f0f0',
+        'bg-primary': '#f0f0f0',
+        'bg-secondary': '#f0f2f4',
+        'btn-primary': '#3c8eef',
+        primary: '#1c1c1c',
+        secondary: '#868686',
+        'secondary-light': '#EFF2F3',
         error: {
           DEFAULT: '#ef4444'
         }

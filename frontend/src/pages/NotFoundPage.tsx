@@ -4,7 +4,7 @@ import { urls } from '../constants/urls';
 
 const NotFoundPage: React.FC = () => {
   return (
-    <div className="w-screen h-screen bg-back-main flex items-center justify-center flex-col gap-6">
+    <div className="w-screen h-screen bg-bg-primary flex items-center justify-center flex-col gap-6">
       <h1 className="text-9xl font-extrabold">Oops!</h1>
       <h2 className="uppercase text-4xl font-medium">404 - page not found</h2>
       <span className="text-xl font-medium w-6/12 text-center">

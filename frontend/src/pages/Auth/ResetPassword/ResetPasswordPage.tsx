@@ -47,7 +47,7 @@ const ResetPasswordPage: React.FC = () => {
   }, [isResetPasswordError]);
 
   return (
-    <div className="min-h-screen max-w-screen bg-back-main flex justify-center items-center">
+    <div className="min-h-screen max-w-screen bg-bg-primary flex justify-center items-center">
       <div className="bg-white rounded-3xl px-24 py-16 shadow-md flex flex-col gap-4 items-center">
         <Form
           className="max-h-full flex justify-center items-center flex-col max-w-md gap-10"
