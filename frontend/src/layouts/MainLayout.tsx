@@ -15,14 +15,10 @@ import DocumentSvg from '../assets/svgs/DocumentSvg';
 import BellSvg from '../assets/svgs/BellSvg';
 import SettingsSvg from '../assets/svgs/SettingsSvg';
 import DoorSvg from '../assets/svgs/DoorSvg';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { urls } from '../constants/urls';
 
-interface IMainLayout {
-  children?: React.ReactNode;
-}
-
-const MainLayout: React.FC<IMainLayout> = ({ children }) => {
+const MainLayout: React.FC = () => {
   const [searchValue, setSearchValue] = useState('');
   const [isLg, setIsLg] = useState(false);
   const navigate = useNavigate();
@@ -87,7 +83,9 @@ const MainLayout: React.FC<IMainLayout> = ({ children }) => {
           </IconButton>
         </div>
       </aside>
-      <main className="bg-blue-600">{children}</main>
+      <main className="bg-blue-600">
+        <Outlet />
+      </main>
     </div>
   );
 };
